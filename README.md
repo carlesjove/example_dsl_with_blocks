@@ -63,3 +63,23 @@ end
 
 Run the tests again, and great!, we get completely different errors.
 
+Before writing more code, however, I need to fix something first. I
+wrote two tests at the beginning, and this is not a great idea. It's better to
+write and pass one test at a time. So let's skip the `#collection` test, by now. MiniTest has a convenient method for this situation,
+`skip`. Let's use it:
+
+```ruby
+def test_that_collection_has_href
+  skip
+  assert_equal ["collection-href"], @serializer.collection.href
+end
+```
+
+Run the tests again, and we get this output:
+
+```bash
+2 runs, 0 assertions, 0 failures, 1 errors, 1 skips
+```
+
+Great, out second test has been skipped.
+

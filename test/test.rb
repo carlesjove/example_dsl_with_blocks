@@ -14,6 +14,7 @@ class TestDsl < Minitest::Test
   end
 
   def test_that_collection_has_href
+    skip
     assert_equal ["collection-href"], @serializer.collection.href
   end
 end
