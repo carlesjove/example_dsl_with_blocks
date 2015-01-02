@@ -180,3 +180,20 @@ class Serializer
   # …
 end
 ```
+
+Now, if we run the tests again, we get a new error:
+
+```bash
+NoMethodError: undefined method `href' for #<Serializer::Item:0x007f90c340a190>
+```
+
+Let's fix this by adding an `href` method to `Item`.
+
+```ruby
+class Serializer
+  class Item
+    def href
+    end
+  end
+end
+```
