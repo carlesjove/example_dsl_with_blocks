@@ -4,5 +4,8 @@ class Serializer
 
   def self.collection
   end
+
+  def item
+  end
 end
 

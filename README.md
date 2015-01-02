@@ -83,3 +83,22 @@ Run the tests again, and we get this output:
 
 Great, out second test has been skipped.
 
+The current error message goes:
+
+```bash
+NoMethodError: undefined method `collection' for #<UserSerializer:0x007fd51ca46408>
+```
+
+See the `#<UserSerializer>` part? This means an instance method is missing.
+Let's add it:
+
+```ruby
+class Serializer
+  # ...
+
+  def item
+  end
+end
+```
+
+
