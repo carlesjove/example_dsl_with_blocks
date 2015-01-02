@@ -101,4 +101,24 @@ class Serializer
 end
 ```
 
+The error message now goes:
 
+```bash
+NoMethodError: undefined method `href' for nil:NilClass
+```
+
+`nil:NilClass` is one of those things you'll see every now and then in Ruby
+error messages. `Nil` is Ruby's default for nothingness, and it can either mean
+that something does not exist, or that if it exists it is absolutely empty. Not
+empty as `"  "`, but empty as `   `.
+
+In this particular situation, the error message translates to "You are calling
+`href` on nothing", and "nothing" here is `item` on `@serializer.item`. It makes
+sense, since the instance method `#item` doesn't return anything, which in Ruby
+means that it returns `nil` (which is, actually, an instance of the `Nil`
+class). Ruby.
+
+What we'd really like is `@serializer.item.href` to return `"item-href"`, but
+first we need to collect it somehow. Remember that our first failing test was
+fixed by adding the class method `#item`? This means that _this_ method, and not
+the instance's, runs first. So maybe we need to start there.
