@@ -122,3 +122,61 @@ What we'd really like is `@serializer.item.href` to return `"item-href"`, but
 first we need to collect it somehow. Remember that our first failing test was
 fixed by adding the class method `#item`? This means that _this_ method, and not
 the instance's, runs first. So maybe we need to start there.
+
+From our design, what we really want to have is an `item` object within
+`@serializer`, and we want to be able to call methods on it. So we need `item`
+to be an object. Let's write an `Item` class and instantiate it in the `#item`
+class method.
+
+```ruby
+# item.rb
+class Item
+end
+
+# serializer.rb
+require_relative 'item'
+
+class Serializer
+  # …
+  def self.item
+    Item.new
+  end
+  # …
+end
+```
+
+Run the tests again, and we run into:
+
+```bash
+uninitialized constant Serializer::Item (NameError)
+```
+
+It was expected that `Item` belonged to the namespace `Serializer`. Makes sense,
+since we'll be using `Item` in the context of `Serializer`. Let's put it in its
+namespace:
+
+```ruby
+# item.rb
+class Serializer
+  class Item
+  end
+end
+```
+
+Run the tests again and it says:
+
+`NoMethodError: undefined method `href' for nil:NilClass`
+
+`@serializer.item.href` at the test is calling `href` on the instance method
+`#item`, not the class method, so we need to return something there. We'll just
+return what we get from `self.item`.
+
+```ruby
+class Serializer
+  # …
+  def item
+    self.class.item
+  end
+  # …
+end
+```
