@@ -1,4 +1,7 @@
 require 'minitest/autorun'
+# I'll keep using `require_relative` for the example,
+# just so I don't have deal with the path
+require_relative '../serializer'
 require_relative 'user_serializer'
 
 class TestDsl < Minitest::Test

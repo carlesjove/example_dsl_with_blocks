@@ -9,3 +9,10 @@ Run the tests, and we get:
 uninitialized constant Serializer (NameError)
 ```
 
+I create a class named `Serializer`, include it in the tests' file, and run them
+again. Now it yells:
+
+```bash
+undefined method `item' for UserSerializer:Class (NoMethodError)
+```
+
