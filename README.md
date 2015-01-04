@@ -308,4 +308,23 @@ Expected: ["item-href"]
   Actual: []
 ```
 
-Yeah! Seems we're back on the right track.
+Yeah! Seems we're back on the right track. But why are we getting an empty
+array? Aren't we collecting the arguments and giving them back? Not exactly.
+We're getting them (all of them, no matter how many of them, thanks to the splat
+operator, \*). But notice that since `href` is a method, when we're trying to
+retrieve the value of `href` with `@serializer.item.href` we're really _calling_ the method, but this time
+with no arguments at all, and hence the empty array. In order to prevent later
+calls to return an empty array, we can:
+
+```ruby
+class Item
+  def href(*args)
+    @href ||= args
+  end
+end
+```
+
+`@href ||= args` means: if `@href` is not set already, set it and fill it with
+`args`. If it is set, return its value.
+
+Run the tests again, and… :tada: :tada: :tada: It passes. Godd job!
