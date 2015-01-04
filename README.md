@@ -197,3 +197,32 @@ class Serializer
   end
 end
 ```
+
+The output if we run the tests again is:
+
+```bash
+Expected: ["item-href"]
+  Actual: nil
+```
+
+Cool! We've been looking for this all the way long. So far, failing tests'
+messages have been guiding us. Now, however, we need to figure out by ourselves how to get
+`Item.href` to return what we expect.
+
+If we look at our initial design, `item` is a block. However, `Serializer#item`
+is not getting the block. So let's start by using the block:
+
+```ruby
+class Serializer
+  def self.item(&block)
+    i = Item.new
+    i.instance_eval(&block)
+  end
+end
+```
+
+See what I've done? The `self.item` method takes a block as its only arguments,
+then we instantiate an `Item`, and call `instance_eval` on it. In plain english,
+what is happening here is that the block itself is being passed to the `Item` instance
+and evaluated within its context. Even more explicit: the instance of `Item`
+will get `href "item-href"` and evaluate it.
