@@ -328,3 +328,13 @@ end
 `args`. If it is set, return its value.
 
 Run the tests again, and… :tada: :tada: :tada: It passes. Godd job!
+
+We're not done, however. Remember we also wanted a `collection` block and we had
+skipped the test? Let's unskip it, and do all we've just done again, but for the
+`collection` method.
+
+At this point, if you've done it, you should have all tests passing. Great job!
+We've just built a block-based DSL together. This is one way of building them,
+and I learned the basics myself from [Active Model Serializers
+source](https://github.com/rails-api/active_model_serializers/blob/master/lib/active_model/serializer.rb).
+Maybe next you can search the web and learn about [other ways to build DSLs in Ruby](http://robots.thoughtbot.com/writing-a-domain-specific-language-in-ruby).
