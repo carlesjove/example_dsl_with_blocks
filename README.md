@@ -274,3 +274,38 @@ you're calling a method without the arguments it needs to be able to call
 `instance_eval`.
 
 Things have changed a little bit, so maybe we should try another strategy.
+
+It's obvious that we must change line 13, since it doesn't make any sense to run
+a method called there. Maybe the `Item` instance could be a class variable and
+this could be returned by `Serializer#item`. A practical way to do so is by
+using Ruby's `attr_accessor`, which will set both a read and write method (a
+getter and a setter) for this. Since we want it to be a class variable, we can
+use the convenient `class << self` construct.
+
+```ruby
+class Serializer
+  class << self
+    attr_accessor :_item
+  end
+
+  def self.item(&block)
+    @_item = Item.new
+    @_item.instance_eval(&block)
+  end
+
+  # …
+
+  def item
+    self.class._item
+  end
+end
+```
+
+Run the tests again, and the output resembles a lot to one we got earlier:
+
+```bash
+Expected: ["item-href"]
+  Actual: []
+```
+
+Yeah! Seems we're back on the right track.
