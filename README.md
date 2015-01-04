@@ -226,3 +226,51 @@ then we instantiate an `Item`, and call `instance_eval` on it. In plain english,
 what is happening here is that the block itself is being passed to the `Item` instance
 and evaluated within its context. Even more explicit: the instance of `Item`
 will get `href "item-href"` and evaluate it.
+
+Now we get this new error message:
+
+`'href': wrong number of arguments (1 for 0) (ArgumentError)`
+
+We're progressing, cause this means that, effectively, we've passed the block to
+`Item`. So maybe now we should edit `Item#href` to take arguments and just
+return them:
+
+```ruby
+class Item
+  def href(*args)
+    args
+  end
+end
+```
+
+Let's run the tests. And, :sweat_smile:
+
+`ArgumentError: wrong number of arguments (0 for 1..3)`
+
+What the hell is this? Let's look at the rest of the message:
+
+```bash
+/Users/carles/code/os/example_dsl_with_blocks/serializer.rb:6:in `instance_eval'
+/Users/carles/code/os/example_dsl_with_blocks/serializer.rb:6:in `item'
+/Users/carles/code/os/example_dsl_with_blocks/serializer.rb:13:in `item'
+test/test.rb:13:in `test_that_item_has_href'
+```
+
+Ok, so it seems that the error message is related to `instance_eval` in some
+way, but the last line says `serializer.rb:13`. So let's look what's going on
+over there.
+
+```ruby
+# serializer.rb:13
+def item
+  self.class.item # this line
+end
+```
+
+I see! At the very beginning of the process we thought that we'd get the data of
+out the class method, but now `self.item` takes a block as an argument, and
+passes it to `instance_eval`. That's what this error message is telling us:
+you're calling a method without the arguments it needs to be able to call
+`instance_eval`.
+
+Things have changed a little bit, so maybe we should try another strategy.

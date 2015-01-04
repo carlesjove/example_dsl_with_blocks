@@ -1,6 +1,7 @@
 class Serializer
   class Item
-    def href
+    def href(*args)
+      args
     end
   end
 end
